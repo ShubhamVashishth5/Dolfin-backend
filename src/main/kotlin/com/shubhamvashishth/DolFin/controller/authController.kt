@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -59,8 +60,12 @@ class AuthController(
         val (access, accessExpiry )= jwtTokenProvider.generateAccessToken(user.username, user.roles)
         val (refresh, refreshExpiry) = jwtTokenProvider.generateRefreshToken(user.username)
         userTokenRepository.save(UserTokens(access, refresh, user.username, accessExpiry, refreshExpiry))
-
         return ResponseEntity.ok(TokenResponse(access, refresh))
+    }
+
+    @GetMapping("/acknowledge")
+    fun acknowledge(): ResponseEntity<String> {
+        return ResponseEntity.ok("Authentication service is running.")
     }
 
 
